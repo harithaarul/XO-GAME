@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XO Game</title>
+
+    <style>
+      body {
+        background-color: black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      .game {
+        color: greenyellow;
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      #top {
+        border: 2px solid yellow;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 12px;
+        background-color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        box-shadow: 0 0 20px aqua;
+        animation: glow 1s ease-in-out infinite alternate;
+      }
+
+      @keyframes glow {
+        from {
+          box-shadow: 0 0 5px aqua;
+        }
+        to {
+          box-shadow: 0 0 20px aqua;
+        }
+      }
+
+      table {
+        border-collapse: collapse;
+      }
+
+      tr {
+        display: flex;
+      }
+
+      td {
+        display: flex;
+      }
+
+      button {
+        background-color: black;
+        margin: 4px;
+        border: none;
+      }
+
+      .color {
+  border: 5px solid yellow;
+  width: 22vw;
+  height: 22vw;
+  max-width: 125px;
+  max-height: 130px;
+  font-size: 110px; /* SAME AS YOUR ORIGINAL CODE */
+  border-radius: 15px;
+  box-shadow: 0px 0px 25px yellow;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+      .win {
+        font-size: 1.2rem;
+        font-style: oblique;
+        color: aqua;
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      #rest {
+        color: white;
+        height: 45px;
+        width: 160px;
+        margin-top: 25px;
+        border: 4px solid greenyellow;
+        box-shadow: 0px 0px 8px palegreen;
+        border-radius: 10px;
+        background-color: black;
+        cursor: pointer;
+      }
+
+      @media (max-width: 480px) {
+         .color {
+    width: 26vw;
+    height: 26vw;
+    font-size: 18vw; 
+  }
+
+
+        .game {
+          font-size: 1.6rem;
+        }
+
+        #top {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1 class="game">XO-GAME</h1>
+    <div id="top">X-turn</div>
+
+    <table onclick="check()">
+      <tr>
+        <td><button onclick="cli()" class="color"><div id="one"></div></button></td>
+        <td><button onclick="cli2()" class="color"><div id="two"></div></button></td>
+        <td><button onclick="cli3()" class="color"><div id="three"></div></button></td>
+      </tr>
+      <tr>
+        <td><button onclick="cli4()" class="color"><div id="four"></div></button></td>
+        <td><button onclick="cli5()" class="color"><div id="five"></div></button></td>
+        <td><button onclick="cli6()" class="color"><div id="six"></div></button></td>
+      </tr>
+      <tr>
+        <td><button onclick="cli7()" class="color"><div id="seven"></div></button></td>
+        <td><button onclick="cli8()" class="color"><div id="eight"></div></button></td>
+        <td><button onclick="cli9()" class="color"><div id="nine"></div></button></td>
+      </tr>
+    </table>
+
+    <div id="result" class="win"></div>
+    <button onclick="restart()" id="rest">RESTART</button>
+
+    <script>
+      var abc = 1;
+      var arr = ["", "", "", "", "", "", "", "", ""];
+      var resultbox = document.getElementById("result");
+
+      function check() {
+        if (
+          (arr[0] === "X" && arr[1] === "X" && arr[2] === "X") ||
+          (arr[3] === "X" && arr[4] === "X" && arr[5] === "X") ||
+          (arr[6] === "X" && arr[7] === "X" && arr[8] === "X") ||
+          (arr[0] === "X" && arr[4] === "X" && arr[8] === "X") ||
+          (arr[2] === "X" && arr[4] === "X" && arr[6] === "X") ||
+          (arr[0] === "X" && arr[3] === "X" && arr[6] === "X") ||
+          (arr[1] === "X" && arr[4] === "X" && arr[7] === "X") ||
+          (arr[2] === "X" && arr[5] === "X" && arr[8] === "X")
+        ) {
+          resultbox.innerHTML = "X wins the game!!!";
+          return;
+        } else if (
+          (arr[0] === "O" && arr[1] === "O" && arr[2] === "O") ||
+          (arr[3] === "O" && arr[4] === "O" && arr[5] === "O") ||
+          (arr[6] === "O" && arr[7] === "O" && arr[8] === "O") ||
+          (arr[0] === "O" && arr[4] === "O" && arr[8] === "O") ||
+          (arr[2] === "O" && arr[4] === "O" && arr[6] === "O") ||
+          (arr[0] === "O" && arr[3] === "O" && arr[6] === "O") ||
+          (arr[1] === "O" && arr[4] === "O" && arr[7] === "O") ||
+          (arr[2] === "O" && arr[5] === "O" && arr[8] === "O")
+        ) {
+          resultbox.innerHTML = "<span style='color:yellow;'>O wins the game!!!</span>";
+          return;
+        } else if (!arr.includes("")) {
+          resultbox.innerHTML = "Match draw :(";
+        }
+      }
+
+      function play(cell, index) {
+        if (cell.innerHTML !== "" || resultbox.innerHTML !== "") return;
+
+        if (abc % 2 === 0) {
+          cell.innerHTML = "O";
+          cell.style.color = "yellow";
+          arr[index] = "O";
+          document.getElementById("top").innerHTML = "X-turn";
+        } else {
+          cell.innerHTML = "X";
+          cell.style.color = "aqua";
+          arr[index] = "X";
+          document.getElementById("top").innerHTML = "O-turn";
+        }
+        abc++;
+      }
+
+      function cli(){ play(one,0); }
+      function cli2(){ play(two,1); }
+      function cli3(){ play(three,2); }
+      function cli4(){ play(four,3); }
+      function cli5(){ play(five,4); }
+      function cli6(){ play(six,5); }
+      function cli7(){ play(seven,6); }
+      function cli8(){ play(eight,7); }
+      function cli9(){ play(nine,8); }
+
+      function restart() {
+        one.innerHTML = two.innerHTML = three.innerHTML = "";
+        four.innerHTML = five.innerHTML = six.innerHTML = "";
+        seven.innerHTML = eight.innerHTML = nine.innerHTML = "";
+        resultbox.innerHTML = "";
+        document.getElementById("top").innerHTML = "X-turn";
+        abc = 1;
+        arr = ["", "", "", "", "", "", "", "", ""];
+      }
+    </script>
+  </body>
+</html>
